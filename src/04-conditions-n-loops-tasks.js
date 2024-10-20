@@ -330,9 +330,7 @@ function isCreditCardNumber(ccn) {
  *   165536 (1+6+5+5+3+6 = 26,  2+6 = 8) => 8
  */
 function getDigitalRoot(num) {
-  const result = num.toString().split('').reduce((sum, item) => sum += +item, 0);
-
-  if (result > 9) return getDigitalRoot(result);
+  const result = num;
   return result;
 }
 
@@ -359,31 +357,19 @@ function getDigitalRoot(num) {
  *   '{[(<{[]}>)]}' = true
  */
 function isBracketsBalanced(str) {
-  const stack = [];
-  const pairs = {
-    '(': ')',
-    '[': ']',
-    '{': '}',
+  if (str.length % 2 !== 0) return false;
+  const bracketsConfig = ['[]', '()', '{}', '<>'];
+  let previousStr;
+  let newStr = str;
+  const replaceBrackets = (bracket) => {
+    newStr = newStr.replace(bracket, '');
   };
+  do {
+    previousStr = newStr;
+    bracketsConfig.forEach(replaceBrackets);
+  } while (previousStr !== newStr);
 
-  for (const char of str) {
-    if (pairs[char]) {
-      stack.push(char);
-    } else if (
-      char === ')'
-          || char === ']'
-          || char === '}'
-    ) {
-      if (
-        pairs[stack.pop()]
-              !== char
-      ) {
-        return false;
-      }
-    }
-  }
-
-  return stack.length === 0;
+  return newStr.length === 0;
 }
 
 
@@ -424,7 +410,7 @@ function toNaryString(num, n) {
  *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/verbalizer/logs'] => '/'
  */
-function getCommonDirectoryPath( pathes ) {
+function getCommonDirectoryPath(pathes) {
   if (pathes.length === 0) return '';
   const paths = pathes.map((path) => path.split('/'));
   const minLength = Math.min(...paths.map((parts) => parts.length));
@@ -459,7 +445,7 @@ function getCommonDirectoryPath( pathes ) {
  *                         [ 6 ]]
  *
  */
-function getMatrixProduct( m1, m2 ) {
+function getMatrixProduct(m1, m2) {
   const rowsM1 = m1.length;
   const colsM2 = m2[0].length;
   const coM1 = m1[0].length;
@@ -508,7 +494,7 @@ function getMatrixProduct( m1, m2 ) {
  *    [    ,   ,    ]]
  *
  */
-function evaluateTicTacToePosition( position ) {
+function evaluateTicTacToePosition(position) {
   for (let i = 0; i < 3; i += 1) {
     if (position[i][0] && position[i][0] === position[i][1] && position[i][0] === position[i][2]) {
       return position[i][0];

@@ -21,7 +21,7 @@
  *    [0, 1, 2, 3, 4, 5], 5    => 5
  */
 function findElement(arr, value) {
-  arr.indexOf(value);
+  return arr.indexOf(value);
 }
 
 /**
@@ -495,7 +495,7 @@ function getIdentityMatrix(n) {
  *     3, 3   => [ 3 ]
  */
 function getIntervalArray(start, end) {
-  return Array(end - start + 1).fill().map(() => start += 1);
+  return Array(end - start + 1).fill().map((item, idex) => start + idex);
 }
 
 /**
