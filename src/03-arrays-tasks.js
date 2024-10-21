@@ -36,13 +36,7 @@ function findElement(arr, value) {
  *    5 => [ 1, 3, 5, 7, 9 ]
  */
 function generateOdds(len) {
-  const arr = [];
-  for (let index = 0; index < len * 2; index += 1) {
-    if (index % 2 !== 0) {
-      arr.push(index);
-    }
-  }
-  return arr;
+  return new Array(len).fill().map((item, index) => index * 2 + 1);
 }
 
 
@@ -166,7 +160,7 @@ function insertItem(arr, item, index) {
  *    [ 'a', 'b', 'c', 'd'], 3  => [ 'a', 'b', 'c' ]
  */
 function getHead(arr, n) {
-  return arr.slice(0, n - 1);
+  return arr.slice(0, n);
 }
 
 
@@ -206,7 +200,7 @@ function getTail(arr, n) {
  *    +'30,31,32,33,34'
  */
 function toCsvText(arr) {
-  return arr.map((item) => item.join(',').join('/n'));
+  return arr.join('\n');
 }
 
 /**
@@ -221,9 +215,8 @@ function toCsvText(arr) {
  *   [ 10, 100, -1 ]      => [ 100, 10000, 1 ]
  */
 function toArrayOfSquares(arr) {
-  return arr.map((item) => item * item);
+  return arr.map((x) => x ** 2);
 }
-
 
 /**
  * Transforms the numeric array to the according moving sum array:
@@ -240,13 +233,10 @@ function toArrayOfSquares(arr) {
  *   [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ] => [ 1, 3, 6, 10, 15, 21, 28, 36, 45, 55 ]
  */
 function getMovingSum(arr) {
-  return arr.reduce((acum, item, index) => {
-    if (index === 0) {
-      acum.push(item);
-      return acum;
-    }
-    acum.push(item + acum[index - 1]);
-    return acum;
+  return arr.reduce((sum, item, index) => {
+    const value = index > 0 ? item + sum[index - 1] : item;
+    sum.push(value);
+    return sum;
   }, []);
 }
 
@@ -262,7 +252,10 @@ function getMovingSum(arr) {
  * [ "a" ] => []
  */
 function getSecondItems(arr) {
-  return arr.filter((item, index) => (index % 2 !== 0 ? item : false));
+  return arr.reduce((sum, item, index) => {
+    if (index % 2 !== 0) sum.push(item);
+    return sum;
+  }, []);
 }
 
 
@@ -281,7 +274,11 @@ function getSecondItems(arr) {
  *  [ 1,2,3,4,5 ] => [ 1, 2,2, 3,3,3, 4,4,4,4, 5,5,5,5,5 ]
  */
 function propagateItemsByPositionIndex(arr) {
-  return arr.map((item, index) => Array(index + 1).fill(item));
+  return arr.reduce((sum, item, index) => {
+    const value = new Array(index + 1).fill(item);
+    sum.push(value);
+    return sum.flat();
+  }, []);
 }
 
 
@@ -385,13 +382,7 @@ function getFalsyValuesCount(arr) {
  *    [ true, 0, 1, 'true' ], true => 1
  */
 function findAllOccurrences(arr, item) {
-  let sum = 0;
-  for (let index = 0; index < arr.length; index = +1) {
-    if (arr[index] === item) {
-      sum = +1;
-    }
-  }
-  return sum;
+  return arr.filter((items) => items === item).length;
 }
 
 /**
@@ -611,6 +602,9 @@ function getElementByIndexes(arr, indexes) {
  */
 function swapHeadAndTail(arr) {
   let newArr = [];
+  if (arr.length <= 1) {
+    return arr;
+  }
   if (arr.length % 2 !== 0) {
     const start = arr.slice(-arr.length / 2);
     const center = arr.splice(Math.floor(arr.length / 2), 1);
